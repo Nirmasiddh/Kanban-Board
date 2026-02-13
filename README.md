@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+#  Kanban Board Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive Kanban board application built with React.js featuring optimistic UI updates, drag-and-drop functionality, and robust error handling with automatic rollback.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- *Mock Authentication*: Simple login system with localStorage persistence
+- *Drag & Drop*: Smooth task movement between columns using @dnd-kit
+- *Optimistic UI*: Instant UI updates with automatic rollback on API failure
+- *Mock API*: Simulated backend with 1-2s latency and 20% random failure rate
+- *State Management*: React Context API for global state management
+- *Toast Notifications*: Real-time feedback for user actions
+- *Responsive Design*: Mobile-friendly layout using Tailwind CSS
+- *Persistent Storage*: Tasks and user session stored in localStorage
 
-### `npm start`
+## 📋 Technical Requirements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- *Framework*: React.js (v19)
+- *Styling*: Tailwind CSS
+- *State Management*: React Context API
+- *Drag & Drop*: @dnd-kit/core and @dnd-kit/sortable
+- *Icons*: lucide-react
+- *Notifications*: sonner (toast library)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🏗️ Project Structure
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+src/
+├── components/
+│   ├── AddTaskForm.js      # Form component for adding new tasks
+│   ├── Column.js            # Kanban column component
+│   ├── TaskCard.js          # Individual task card with drag handle
+│   └── ui/                  # Shadcn UI components
+├── context/
+│   ├── AuthContext.js       # Authentication state management
+│   └── KanbanContext.js     # Kanban board state with optimistic updates
+├── pages/
+│   ├── LandingPage.js       # Login page
+│   └── KanbanBoard.js       # Main Kanban board view
+├── utils/
+│   └── mockApi.js           # Mock API with delay and failure simulation
+├── App.js                   # Main app component with routing
+└── index.js                 # App entry point
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🎯 How to Use
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. *Login*: Enter any non-empty username/email on the landing page
+2. *Add Task*: Click "Add New Task" button and enter task title
+3. *Move Task*: Drag and drop tasks between columns (To Do, In Progress, Done)
+4. *Delete Task*: Hover over a task card and click the delete icon
+5. *Logout*: Click the logout button in the header
 
-### `npm run eject`
+## 🧠 Optimistic UI Approach
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Implementation Strategy
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The application implements optimistic UI updates to provide instant user feedback while maintaining data consistency:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. *Immediate Update*: When a user performs an action (add, move, delete), the UI updates instantly
+2. *State Snapshot*: Before the API call, we capture the current state
+3. *Async API Call*: Make the mock API request in the background
+4. *Success Handling*: If successful, the optimistic update becomes permanent
+5. *Failure Handling*: If failed, automatically rollback to the previous state and show an error toast
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+### Rollback Logic
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The rollback mechanism ensures data consistency:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- *State Preservation*: Before each operation, we create a deep copy of the current state
+- *Automatic Reversion*: On API failure, we restore the previous state instantly
+- *User Notification*: Display clear error messages via toast notifications
+- *No Data Loss*: LocalStorage is updated only after successful operations or during rollback
 
-### Code Splitting
+### Why This Approach?
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- *Better UX*: Users don't wait for server responses
+- *Feels Responsive*: App feels fast and snappy
+- *Clear Feedback*: Users know immediately if something went wrong
+- *Data Integrity*: Automatic rollback prevents inconsistent states
 
-### Analyzing the Bundle Size
+## 🎲 Mock API Behavior
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The mock API simulates realistic backend behavior:
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- *Latency*: Random delay between 1-2 seconds per operation
+- *Failure Rate*: 20% cacing
+- Built with React.js, Tailwind CSS, and modern web technologies.
